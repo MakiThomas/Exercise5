@@ -1,0 +1,45 @@
+V = {1:'A',2:'B',3:'C',4:'D',5:'E',6:'F'} # number of verticies : n = 6
+# I am going to generate DIRECTED random graphs by using a 'random' command and dictionaries. Because the number of edges and the end verticy(ies) from a verticy has no correlation to others, it is simply a linear relationship.
+
+import random
+from random import randint
+import string
+def id_generator(size, chars=string.ascii_uppercase):
+    return "".join(random.sample(chars,size))
+graph = {}
+i = 0
+v = "ABCDEF"
+for i in V:
+    e = (randint(0,5))#For n numbers of verticy, number of edge(s) :e extends from each verticy is randomly selected from 0 to n-1
+    ev = v.replace(V[i],"") #combinatioin of verticies that have possibility to be connected with the start-verticy
+    print e, ev
+    graph[V[i]] = list(id_generator(e,ev))
+    i +=1
+print graph
+#Every run randomly generates a different graph.
+
+def find_path(graph, start, end, path=[]):
+        path = path + [start]
+        if start == end:
+            return path
+        if not graph.has_key(start):
+            return None
+        for node in graph[start]:
+            if node not in path:
+                newpath = find_path(graph, node, end, path)
+                if newpath: return newpath
+        return None
+find_path(graph,'A','F')
+def find_all_paths(graph, start, end, path=[]):
+        path = path + [start]
+        if start == end:
+            return [path]
+        if not graph.has_key(start):
+            return []
+        paths = []
+        for node in graph[start]:
+            if node not in path:
+                newpaths = find_all_paths(graph, node, end, path)
+                for newpath in newpaths:
+                    paths.append(newpath)
+        return paths
